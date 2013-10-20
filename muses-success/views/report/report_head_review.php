@@ -1,0 +1,1 @@
+<p>You have chosen to report <?php echo $data['user']; ?>'s <a href="<?php echo $data['review']; ?>">review</a> of <?php echo $data['story']; ?>.</p>

@@ -1,0 +1,17 @@
+body { background: #D7D8E2; }
+#site_title { background: url(../../images/header.jpg); }
+a, ul#menu ul li a, ul#user_nav ul ul li a { color:#321C42; }
+a:visited, ul#menu ul li a:visited, #user_nav ul ul li a:visited { color:#000000; }
+ul#menu ul li, #user_nav ul ul li { background: #FFF; color: #000; }
+#menu, #head_wrap, #foot_wrap, ul#menu li li:hover, #user_nav li li:hover { background: #311443; color: #FFF; border-color: #000; }
+ul#menu li ul, #user_nav ul li ul, #user_nav ul li ul li:hover { border-color: #311443; }
+#menu a, #user_nav a, #user_nav, p.breadcrumbs a, p.breadcrumbs, .links_within_footer a, .copyright, .copyright a { color: #FFF; }
+ul#menu ul li a:hover, #user_nav ul ul li a:hover { color:#FFF; }
+#menu a:visited, #user_nav a:visited, #user_nav, p.breadcrumbs a:visited, p.breadcrumbs, .links_within_footer a:visited, .copyright, .copyright a:visited { color: #FFF; }
+#main_page_content { background: #FFF; border-color: #000; }
+th { background: #433448; color: #fff; padding: 6px; }
+td { padding: 6px; border-color: #CCCCCC; }
+li.current a, .ui_element_tabs a:hover {  color: #FFF; background: #311443; } 
+.ui_element_tabs { border-bottom: 2px solid #311443; }
+del { background: #ffd5dd; }
+ins { background: #bdffbd; text-decoration: none; }

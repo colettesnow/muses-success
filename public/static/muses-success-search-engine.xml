@@ -1,0 +1,11 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Muse's Success</ShortName>
+<Description>Search Web Fiction Listings and Reviews at Muse's Success</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image height="16" width="16" type="image/x-icon">http://static.sorrowfulunfounded.com/muses-success/favicon.ico</Image>
+<Url type="text/html" method="POST" template="http://muses-success.sorrowfulunfounded.com/search/results/">
+  <Param name="q" value="{searchTerms}"/>
+</Url>
+<moz:SearchForm>http://muses-success.sorrowfulunfounded.com/search/</moz:SearchForm>
+</OpenSearchDescription>

@@ -1,0 +1,39 @@
+/* Main, Global Elmenets */
+body { margin: 0 auto; width: 960px; font-size: 10pt; font-family: Verdana, sans-serif; }
+
+#head_wrap { margin-top: 30px; border-width: 2px 2px 0 2px; border-style: solid; font-family: Helvetica, sans-serif; }
+#site_title { height: 100px; text-indent: -33333333px; margin-top: 30px; }
+#site_title a { display: block; width: 400px; height: 100px; }
+#menu { margin: 0; padding: 0; list-style: none; font-size: 10pt; }
+#menu li a { text-decoration: none; }
+#menu ul span:first-child { font-size: 10pt; }
+#menu ul span { font-size: 6pt; } 
+#menu li { display: inline-block; padding: 10px; }
+#menu li ul { display: none; }
+ul#menu li:hover ul, #user_nav ul li:hover ul { display: block; z-index: 22; }
+ul#menu li ul, #user_nav ul li ul { position: absolute; padding: 10px 0 0 0; margin: 0 -4px; width: 200px; border-bottom: 1px solid; }
+ul#menu li li, #user_nav ul li li { display: block; font-size: 10pt; padding: 0; width: auto; border-left: 1px solid; border-right: 1px solid; }
+#user_nav ul ul li:first-child { border-top: 1px solid; }
+ul#menu li li a, #user_nav ul li li a  { display: block; width: 200px; padding: 2px 4px; }
+#user_nav { font-family: Helvetica, sans-serif;margin: 0; padding: 0; list-style: none; font-size: 10pt; float: right; margin-top: -50px; height: 30px; }
+#user_nav li a { text-decoration: none; }
+#user_nav li { display: inline-block; padding: 10px; }
+#user_nav li ul { display: none; }
+#main_page_content { border-width: 0 1px; border-style: solid; }
+#search { display: none; }
+#main_page_content .rcol { width: 430px; }
+#foot_wrap { margin: 0; height: 65px; margin-bottom: 20px; border-width: 0 2px 2px 2px; border-style: solid; }
+#foot_wrap ul { margin: 0; float: left; text-align: left; margin-left: -188px; list-style: none; padding: 10px; }
+#foot_wrap li { display: inline-block; padding-right: 10px; } 
+#foot_wrap p { float: left; margin: 0; margin-top: 30px; padding: 10px; font-size: smaller; }
+
+/* Headings */
+
+h1, h2, h3, h4, h5, h6 { font-family: Arial, sans-serif; }
+#main_page_content h1 { font-size: 14pt; border-bottom: 1px solid #000; margin-top: 0px; }  
+
+p.breadcrumbs { width: 960px; font-size: 8pt; margin: -10px; margin-top: -175px; position: absolute; padding: 6px 10px; }
+
+/* Content Area */
+#main_page_content { min-height: 400px; padding: 10px 10px; }
+#main_page_content input[type="text"], #main_page_content input[type="password"] { width: 290px; }

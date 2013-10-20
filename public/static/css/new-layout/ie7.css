@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+
+#site_title, #menu, #menu li, #user_search_head_group, #user_nav ul li, #copyright, .links_within_footer, .links_within_footer li, .ui_element_tabs a, .tag_block, .column, .mature, .mature label, .recommendation .thumbnail, .recommendation .details, .listing-thumbnail, .top-listing-right, .purchase-books li { display: inline; zoom: 1; }
+
+.newest { padding: 0; margin: 0; }
+
+.edit-btn { margin-top: -20px; }
+
+#footer { padding-top: 6px; }
+#copyright { float: left; margin-top: 5px; }
+.links_within_footer { margin: 0; float: right; width: auto; margin-top: -35px; } 
+

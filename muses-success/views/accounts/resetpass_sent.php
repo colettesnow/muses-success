@@ -1,0 +1,1 @@
+<p>We have sent you an email with instructions on how to continue with resetting your password.</p>

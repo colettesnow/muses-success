@@ -1,0 +1,9 @@
+User-agent: *
+Sitemap: http://muses-success.info/sitemap
+Disallow: /api/submit-rating
+Disallow: /api/bookshelfs/minuschapter
+Disallow: /api/bookshelfs/addchapter
+Disallow: /browse/rate
+Disallow: /contribute/add_new_tag
+Disallow: /report
+Disallow: /tags/manage

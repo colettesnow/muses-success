@@ -1,0 +1,23 @@
+@CHARSET "UTF-8";
+html,#head_wrap,#foot_wrap { background-color: #D8ECFF; font-family: Helvetica, sans-serif; }
+body,#main_page_content, ul#menu li li, #user_nav li li { background: #FFF; color: #404040; }
+#header #site_title { background: url(../../images/ms-logo.png) center no-repeat; }
+#main_page_content { font-family: Helvetica, sans-serif; }
+a { color: #404040; }
+ul#menu li li:hover, #user_nav li li:hover { background: #D8ECFF; }
+h1 { color: #3969a6; }
+#head_wrap,#foot_wrap, ul#menu li ul, ul#menu li li, #user_nav li li, #user_nav li ul { border-color: #3969a6; }
+th { background: #D8ECFF; }
+td { border-color: #e4e4e4; }
+.alert, .ui_note { border-color: #FFE0BE; background: #fff0df; margin: 0 0; }
+
+.notapproved { background: #ececec; }
+.rejected { background: #f2e3e3; }
+.approved { background: #e1ffc1 }
+
+li.current a, .ui_element_tabs a:hover {  color: #FFF; background: #3969a6; } 
+.ui_element_tabs { border-bottom: 2px solid #3969a6; }
+
+.column .hreview:first-child { border-top: 0px !important; }
+.column .hreview:last-child { border-bottom: 0px !important; }
+.column .recommendation:first-child { border-bottom: 1px solid #cfcfcf; }

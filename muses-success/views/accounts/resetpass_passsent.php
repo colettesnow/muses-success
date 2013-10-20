@@ -1,0 +1,1 @@
+<p>An email containing your new password has been sent to your email address.</p>

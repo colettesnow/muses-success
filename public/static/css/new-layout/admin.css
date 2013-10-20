@@ -1,0 +1,6 @@
+@CHARSET "ISO-8859-1";
+
+#admin #admin_menu { display: inline-block; width: 170px; padding-left: 10px; padding-top: 10px; }
+#admin #admin_menu ul { list-style: none; display: block; margin: 0; padding: 0; }
+#admin #admin_menu li { padding: 2px; }
+#admin #actual { display: inline-block; width: 770px; }
