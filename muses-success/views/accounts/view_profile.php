@@ -67,10 +67,6 @@
                                 <td width="30%"><strong>User Group:</strong></td>
                                 <td class="role"><?php echo $user_group; ?></td>
                         </tr>
-                        <tr>
-                                <td style="width: 30%;"><strong>Forum Posts:</strong></td>
-                                <td><?php echo round($user_info['post_count']); ?></td>
-                        </tr>
                         <?php if ($this->users->has_permission('g_ip_address_visible') == 2) { ?>
                         <tr>
                                 <td style="width: 30%;"><strong>IP Address:</strong></td>
