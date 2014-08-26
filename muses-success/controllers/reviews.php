@@ -31,7 +31,7 @@ class Reviews extends Controller {
         {
                 $review_id = $this->uri->segment(3);
                 
-                $this->load->model(array('novels', 'reviews_model', 'thumbnails'));
+                $this->load->model(array('novels', 'reviews_model', 'thumbnails', 'recs'));
                 
                 $review = $this->reviews_model->get_review($review_id);
                 
@@ -41,6 +41,9 @@ class Reviews extends Controller {
                         $novel['tab'] = 'reviews';
                         $novel['tab_anyway'] = true;
                         $novel['in_bookshelf'] = $this->in_library($novel["id"]);
+                        $novel['reviews'] = array("Hello");
+                        $novel['recommendations'] = $this->recs->list_recommendations($novel['id'], 2);
+                        $novel['comments'] = array_reverse($this->novels->get_comments($novel['id']));                     
                         $rating_count_members_query = $this->db->query('SELECT COUNT(`rating_id`) AS `rating_count` FROM `ratings` WHERE `user_id` > 0 AND `story_id` = \''.$novel['id'].'\' LIMIT 1');
                         $rating_count_members = $rating_count_members_query->row();
                         $novel['rating_member_votes'] = $rating_count_members->rating_count;
