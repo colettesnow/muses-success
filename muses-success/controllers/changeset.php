@@ -36,8 +36,21 @@ class Changeset extends Controller {
         if ($this->changes->changeset_exists($changeset_id) == true)
         {
             $this->load->model(array('novels', 'thumbnails', 'recs', 'tags', 'reviews_model'));
-                        $this->load->helper(array('text', 'markdown'));
+            $this->load->helper(array('text', 'markdown'));
             
+            $this->load->library('disqus_sso');
+
+            if ($this->config->item("use_disqus_sso") == true && $this->users->logged_in == true)
+            {
+                $avatar = 'http://www.gravatar.com/avatar/'.md5(strtolower(trim($this->users->cur_user['email_address'])));
+
+                $this->disqus_sso->set_public_key($this->config->item("disqus_public_key"));
+                $this->disqus_sso->set_secret_key($this->config->item("disqus_secret_key"));
+                $this->disqus_sso->set_user($this->users->cur_user["user_id"], $this->users->cur_user["username"], $this->users->cur_user["email_address"]);
+                $this->disqus_sso->set_avatar($avatar);
+                $this->disqus_sso->set_url(site_url('profile/view/'.$this->users->cur_user['user_id']));
+            }
+
             $data = array('revision' => $changeset_id, 'changes' => $this->changes->get_changes($changeset_id));
 
                     $changeset = $this->changes->get_changeset($changeset_id);
@@ -84,6 +97,7 @@ class Changeset extends Controller {
                     
                     
                     $page_data = array();
+                    $page_data['comments_closed'] = true;
                     $page_data['breadcrumbs'] = array('<a href="'.site_url('browse').'">Web Fiction Listings</a>', '<a href="'.site_url($listing_data['slug']).'">'.$listing_data['title'].'</a>', 'Change Set #'.$changeset_id);
                     $page_data['page_title'] = 'Prior Revision of Listing '.$listing_data['title'];
                     $page_data['use_javascript'] = true;

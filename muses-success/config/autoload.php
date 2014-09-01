@@ -79,7 +79,7 @@ $autoload['plugin'] = array();
 |
 */
 
-$autoload['config'] = array("web_fiction");
+$autoload['config'] = array("web_fiction", "comments");
 
 
 /*

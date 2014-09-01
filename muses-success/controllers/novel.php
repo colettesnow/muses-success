@@ -47,7 +47,18 @@ class Novel extends Controller {
 
                 $this->load->model(array('novels','thumbnails', 'reviews_model', 'tags'));
                 $this->load->helper('text');
-                $this->load->library('simple_cache');
+                $this->load->library(array('simple_cache', 'disqus_sso'));
+
+                if ($this->config->item("use_disqus_sso") == true && $this->users->logged_in == true)
+                {
+                    $avatar = 'http://www.gravatar.com/avatar/'.md5(strtolower(trim($this->users->cur_user['email_address'])));
+
+                    $this->disqus_sso->set_public_key($this->config->item("disqus_public_key"));
+                    $this->disqus_sso->set_secret_key($this->config->item("disqus_secret_key"));
+                    $this->disqus_sso->set_user($this->users->cur_user["user_id"], $this->users->cur_user["username"], $this->users->cur_user["email_address"]);
+                    $this->disqus_sso->set_avatar($avatar);
+                    $this->disqus_sso->set_url(site_url('profile/view/'.$this->users->cur_user['user_id']));
+                }
 
                 if (($novel_id != '' && $this->novels->novel_exists($novel_id) == true) || (intval($novel_id) != 0 && $this->novels->novel_exists_id($novel_id) == true))
                 {
@@ -59,9 +70,16 @@ class Novel extends Controller {
                             $novel = $this->novels->get_novel($novel_id);
                             $novel['reviews'] = $this->reviews_model->get_reviews('helpful', $novel['id'], 2);
                             $novel['recommendations'] = $this->recs->list_recommendations($novel['id'], 2);
-                            $novel['comments'] = array_reverse($this->novels->get_comments($novel['id']));
+
+                            $comments_closed = false;
+                            if ($this->config->item("use_disqus") == false)
+                            {
+                                $novel['comments'] = array_reverse($this->novels->get_comments($novel['id']));
+                            }
+
+
                             $novel['in_bookshelf'] = $this->in_library($novel["id"]);
-                            
+
                             $rating_count_members_query = $this->db->query('SELECT COUNT(`rating_id`) AS `rating_count` FROM `ratings` WHERE `user_id` > 0 AND `story_id` = \''.$novel['id'].'\' LIMIT 1');
                             $rating_count_members = $rating_count_members_query->row();
                             $novel['rating_member_votes'] = $rating_count_members->rating_count;
@@ -91,6 +109,9 @@ class Novel extends Controller {
                         }
 
                         $page_data['use_javascript'] = true;
+                        $page_data['comment_thread_id'] = 'novel-'.$novel['id'].'-comments';
+                        $page_data['comment_thread_title'] = $novel['title'].' by '.$novel['author_pen'];
+                        $page_data['comments_closed'] = false;
                         $page_data['javascript'] = array('jqueryui/js/jquery-ui-1.8.4.custom.min.js','star_rating/jquery.ui.stars.min.js', 'rate.js');
                         $page_data['canonical'] = site_url($novel['slug']);
                         $page_data['breadcrumbs'] = array('<a href="'.site_url('browse').'">Web Fiction Listings</a>', $novel['title']);
@@ -101,11 +122,11 @@ class Novel extends Controller {
 						$page_data["facebook"]["author:username"] = $novel["author_pen"];
 						$split_name = explode(" ", $novel["author_pen"]);
 						$name_count = count($split_name);
-						
+
 						$page_data["facebook"]["author:first_name"] = $split_name[0];
 						if (isset($split_name[$name_count-1])) {
-							$page_data["facebook"]["author:last_name"] = $split_name[$name_count-1];							
-						}						
+							$page_data["facebook"]["author:last_name"] = $split_name[$name_count-1];
+						}
 						$page_data["facebook"]["url"] = $novel["listing_url"];
 						$page_data["facebook"]["description"] = character_limiter(strip_tags($novel["summary"]),140);
 
@@ -119,7 +140,7 @@ class Novel extends Controller {
                             } else {
                                 $summary .= " - Updated ".$novel["update_schedule"];
                             }
-                        } 
+                        }
 
 						$page_data['meta_description'] = character_limiter("By ".$novel["author_pen"]." - ".$novel["primary_genre"]." - ".strip_tags($summary)."", 140);
 
@@ -157,7 +178,7 @@ class Novel extends Controller {
                         $helpful = $this->uri->segment(3);
                         $reviewid = $this->uri->segment(4);
                         $exists = false;
-                        
+
                             $rating_count_members_query = $this->db->query('SELECT COUNT(`rating_id`) AS `rating_count` FROM `ratings` WHERE `user_id` > 0 AND `story_id` = \''.$novel['id'].'\' LIMIT 1');
                             $rating_count_members = $rating_count_members_query->row();
                             $novel['rating_member_votes'] = $rating_count_members->rating_count;
@@ -254,11 +275,11 @@ class Novel extends Controller {
                         $ranking_query = $this->db->query('SELECT @rank:=@rank+1 AS rank FROM `stories` WHERE `story_id` = \''.$novel['id'].'\' ORDER BY `rating_order` DESC;');
                         $ranking_result = $ranking_query->row();
                         $novel['rating_guests_votes'] = $rating_count_guests->rating_count;
-                        
+
                         $page_data = array('page_title' => 'Readers List - '.$novel['title'], 'rating' => true, 'id' => $novel['id']);
                         $page_data['canonical'] = site_url($novel['slug'].'/readers');
                         $page_data['use_javascript'] = true;
-                        $page_data['javascript'] = array('jqueryui/js/jquery-ui-1.8.4.custom.min.js','star_rating/jquery.ui.stars.min.js', 'rate.js');                        
+                        $page_data['javascript'] = array('jqueryui/js/jquery-ui-1.8.4.custom.min.js','star_rating/jquery.ui.stars.min.js', 'rate.js');
                         $page_data['breadcrumbs'] = array('<a href="'.site_url('browse').'">Web Fiction Listings</a>', '<a href="'.site_url($novel['slug']).'">'.$novel['title'].'</a>', 'Readers');
                         $this->load->view('header', $page_data);
                         $this->load->view('novel/readers', $novel);
@@ -280,14 +301,14 @@ class Novel extends Controller {
                 if ($this->novels->novel_exists($novel_id) == true)
                 {
                     $novel = $this->novels->get_novel($novel_id);
-                    
+
                     $page_data = array();
                     $page_data['page_title'] = 'Recommendations - '.$novel['title'];
                     $page_data['use_javascript'] = true;
                     $page_data['javascript'] = array('jqueryui/js/jquery-ui-1.8.4.custom.min.js','star_rating/jquery.ui.stars.min.js', 'rate.js');
                     $page_data['canonical'] = site_url($novel['slug'].'/reviews');
                     $page_data['breadcrumbs'] = array('<a href="'.site_url('browse').'">Web Fiction Listings</a>', '<a href="'.site_url($novel['slug']).'">'.$novel['title'].'</a>', 'Similar Recommendations');
-                    
+
                     $rating_count_members_query = $this->db->query('SELECT COUNT(`rating_id`) AS `rating_count` FROM `ratings` WHERE `user_id` > 0 AND `story_id` = \''.$novel['id'].'\' LIMIT 1');
                     $rating_count_members = $rating_count_members_query->row();
                     $novel['rating_member_votes'] = $rating_count_members->rating_count;
@@ -302,16 +323,16 @@ class Novel extends Controller {
                     $this->load->view('header', $page_data);
                     $this->load->view('novel/recommendations', $novel);
                     $this->load->view('footer');
-                                                   
-                } else {
-                    
-                    show_404('browse/view/'.$novel_id.'/');
-                    
-                }            
-            
-        }   
 
-        
+                } else {
+
+                    show_404('browse/view/'.$novel_id.'/');
+
+                }
+
+        }
+
+
         function library_get($reading_status, $book_id)
         {
                 $books = array();

@@ -9,9 +9,9 @@
 <div itemprop="description">
 
 <?php if (isset($summary) && $summary != "") { echo $summary; } else {
-    
-    echo "<p>".$title." by ".$author_pen." is a ".strtolower($primary_genre)." novel updated ".strtolower($update_schedule).".</p>";  
-    
+
+    echo "<p>".$title." by ".$author_pen." is a ".strtolower($primary_genre)." novel updated ".strtolower($update_schedule).".</p>";
+
 } ?></div>
 
 <style type="text/css">
@@ -83,7 +83,7 @@ reviews by <?php echo $review['username']; ?></a></p>
         if ($this->users->logged_in == true) {
                    echo "<p>".$title." has not been reviewed yet. Be the first and <a href=\"".site_url("contribute/submit_review/".$id)."\">write one</a>.</p>";
         } else {
-            echo "<p>".$title." has not been reviewed yet.</p>";        
+            echo "<p>".$title." has not been reviewed yet.</p>";
         }
 } ?></div>
 
@@ -115,12 +115,12 @@ reviews by <?php echo $review['username']; ?></a></p>
 
         <?php }
 } else { ?>
-<p><?php echo $title; ?> has not been recommended yet. <?php 
+<p><?php echo $title; ?> has not been recommended yet. <?php
 
-if ($this->users->logged_in == true) {  
-    
+if ($this->users->logged_in == true) {
+
     if ($in_bookshelf != false) { ?>
-    <a href="<?php echo site_url("recommendations/make/".$id); ?>">Recommend It!</a><?php 
+    <a href="<?php echo site_url("recommendations/make/".$id); ?>">Recommend It!</a><?php
     } else { ?>You can recommend it but you must <a href="#addbookshelf">add it to your bookshelf</a> first.<?php } } ?></p>
 <?php } ?>
 
@@ -128,46 +128,16 @@ if ($this->users->logged_in == true) {
 
 <h3>Comments</h3>
 
-<div class="comments">
+<?php
 
-<?php if (count($comments) >= 1) {
-    foreach ($comments as $comment) {
-        ?>
+if ($this->config->item("use_disqus") == true)
+{
+    $this->load->view("comments/disqus");  
+} else {
+    $this->load->view("comments/native");  
+}
 
-                <div class="comment">
-                        <div class="avatar"><a href="<?php echo $comment['profile']; ?>"><img src="<?php echo $comment['avatar']; ?>" height="60" width="60" alt="Avatar" /></a></div>
-                        <div class="comment_text">                        
-                                <p class="commentor"><?php echo $comment['user']; ?> says 
-                                <span class="comment_date"><?php echo $comment['date']; ?> | <a href="<?php echo site_url('report/comment/'.$comment['id'].''); ?>">Report</a></span></p>
-                                        
-                        <?php echo $comment['comment']; ?>                                                
-                        </div>
-                        <div class="anchor"></div>
-                </div>
-
-        <?php }
-} else { ?>
-
-<p>No one has commented on <?php echo $title; ?> yet.</p>
-
-<?php } ?>
-
-</div>
-
-<?php if ($this->users->logged_in == true && (isset($older_revision) == false)) { ?>
-
-<h3>Write Comment</h3>
-
-<form method="post" action="<?php echo site_url("contribute/add_comment"); ?>">
-        <p><textarea name="comment" id="addcommentform"></textarea></p>
-        <input type="hidden" name="listing_id" value="<?php echo $id; ?>" />
-        <p><input type="submit" name="add" value="Add Comment" /></p>
-</form>
-
-<?php } ?>
-
-</div>
-
+?>
 </div>
 <script type="text/javascript">
   window.___gcfg = {lang: 'en-GB'};

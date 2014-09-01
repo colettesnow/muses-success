@@ -6,6 +6,7 @@ $config["use_disqus"] = false;
 // Disqus Settings
 
 $config["use_disqus_sso"] = false;
+$config["disqus_dev_mode"] = false;
 $config["disqus_secret_key"] = "";
 $config["disqus_public_key"] = "";
 
