@@ -46,7 +46,7 @@
 
             <div class="clear"></div>
 
-            <!--- mostly useless div, but we can't style markdown easily --->
+            <!--- mostly useless div, but we can't style markdown easily -->
             <div class="rec_comment">
                 <?php echo $recommendation['comment']; ?>
             </div>
