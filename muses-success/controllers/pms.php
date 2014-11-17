@@ -145,9 +145,9 @@ class PMS extends Controller {
                 	'page_title' => 'Private Messages - Inbox',
                 	'breadcrumbs' => array(
                 						'<a href="'.site_url('pms').'">Private Messages</a>',
-                						'View Message - '.$item['message_subject'].''							
-                		)
-               			 );
+                						'View Message - '.$data['item']['message_subject'].''
+                                    )
+               			      );
                         
                         $this->load->view('header', $header_data);
                         $this->load->view('pms/view', $data);
