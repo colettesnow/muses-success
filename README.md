@@ -1,10 +1,10 @@
 # Muse's Success Source Code
 
-Developed by [Colette Snow](http://colettesnow.com).
+Developed by [Colette Snow](https://colettesnow.com).
 
 ## About
 
-This is the source code that powers [muses-success.info](http://muses-success.info).
+This is the source code that powers [muses-success.info](https://muses-success.info).
 
 ## Requirements
 
