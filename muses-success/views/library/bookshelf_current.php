@@ -23,7 +23,7 @@
                 <th colspan="3">Currently Reading</th>
         </tr>
         <?php foreach ($currently_reading as $book) {
-                echo '<tr class="content"><td>'.$book['novel'].'</td><td>'.$book['chapter_count'].'/'.$book['total_chapters'].'</td><td>'.(($book['rating'] != 0) ? $book['rating'].'/10' : 'Not Rated').'</td></tr>';
+                echo '<tr class="content"><td><a href="'.site_url($book['story_slug']).'">'.$book['title'].'</a> by '.$book['author'].'</td><td>'.$book['read_chapter_count'].'/'.$book['total_chapter_count'].'</td><td>'.(($book['rating'] != 0) ? $book['rating'].'/10' : 'Not Rated').'</td></tr>';
         } ?>
 </table>
 <?php } else { echo '<p>This user either is not reading anything or they haven\'t chosen to list what they are reading on their bookshelf.</p>'; }  ?>

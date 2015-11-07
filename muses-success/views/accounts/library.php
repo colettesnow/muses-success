@@ -13,7 +13,9 @@ $count_total = round($count_current+$count_planned+$count_onhold+$count_complete
 
 function novel_item($novel_id, $novel, $read_ch, $total_ch, $rating)
 {
-        echo '<tr class="content"><td><input type="checkbox" name="reading[]" value="'.$novel_id.'" /></td><td>'.$novel.'</td><td><span id="read_num_'.$novel_id.'">'.$read_ch.'</span>/'.$total_ch.' <a href="javascript:addchapter('.$novel_id.');" title="Click to increase your read chapter number by one">+</a></td><td>'.$rating.'/10</td></tr>';
+        $format_title = '<a href="'.site_url($novel[0]).'">'.$novel[1].'</a> by '.$novel[2];
+
+        echo '<tr class="content"><td><input type="checkbox" name="reading[]" value="'.$novel_id.'" /></td><td>'.$format_title.'</td><td><span id="read_num_'.$novel_id.'">'.$read_ch.'</span>/'.$total_ch.' <a href="javascript:addchapter('.$novel_id.');" title="Click to increase your read chapter number by one">+</a></td><td>'.$rating.'/10</td></tr>';
 }
 
 if ($count_total != 0)
@@ -32,7 +34,7 @@ if ($count_total != 0)
                 <th colspan="4">Currently Reading</th>
         </tr>
         <?php foreach ($reading_current as $novel) { ?>
-        <?php novel_item($novel['id'], $novel['novel'], $novel['chapter_count'], $novel['total_chapters'], $novel['rating']); ?>
+        <?php novel_item($novel['id'], array($novel['story_slug'], $novel['title'], $novel['author']), $novel['read_chapter_count'], $novel['total_chapter_count'], $novel['rating']); ?>
         <?php } ?>
         <?php } ?>
         <?php if ($count_complete != 0) { ?>
@@ -40,7 +42,7 @@ if ($count_total != 0)
                 <th colspan="4">Finished Reading</th>
         </tr>
         <?php foreach ($reading_complete as $novel) {?>
-        <?php novel_item($novel['id'], $novel['novel'], $novel['chapter_count'], $novel['total_chapters'], $novel['rating']); ?>
+        <?php novel_item($novel['id'], array($novel['story_slug'], $novel['title'], $novel['author']), $novel['read_chapter_count'], $novel['total_chapter_count'], $novel['rating']); ?>
         <?php } ?>
         <?php } ?>
         <?php if ($count_planned != 0) { ?>
@@ -48,7 +50,7 @@ if ($count_total != 0)
                 <th colspan="4">Plan to Read</th>
         </tr>
         <?php foreach ($reading_planned as $novel) { ?>
-        <?php novel_item($novel['id'], $novel['novel'], $novel['chapter_count'], $novel['total_chapters'], $novel['rating']); ?>
+        <?php novel_item($novel['id'], array($novel['story_slug'], $novel['title'], $novel['author']), $novel['read_chapter_count'], $novel['total_chapter_count'], $novel['rating']); ?>
         <?php } ?>
         <?php } ?>
         <?php if ($count_onhold != 0) { ?>
@@ -56,7 +58,7 @@ if ($count_total != 0)
                 <th colspan="4">On-Hold</th>
         </tr>
         <?php foreach ($reading_onhold as $novel) {?>
-        <?php novel_item($novel['id'], $novel['novel'], $novel['chapter_count'], $novel['total_chapters'], $novel['rating']); ?>
+        <?php novel_item($novel['id'], array($novel['story_slug'], $novel['title'], $novel['author']), $novel['read_chapter_count'], $novel['total_chapter_count'], $novel['rating']); ?>
         <?php } ?>
         <?php } ?>
         <?php if ($count_dropped != 0) { ?>
@@ -64,7 +66,7 @@ if ($count_total != 0)
                 <th colspan="4">Dropped</th>
         </tr>
         <?php foreach ($reading_dropped as $novel) { ?>
-        <?php novel_item($novel['id'], $novel['novel'], $novel['chapter_count'], $novel['total_chapters'], $novel['rating']); ?>
+        <?php novel_item($novel['id'], array($novel['story_slug'], $novel['title'], $novel['author']), $novel['read_chapter_count'], $novel['total_chapter_count'], $novel['rating']); ?>
         <?php } ?>
         <?php } ?>
 </table>
@@ -80,5 +82,3 @@ if ($count_total != 0)
 <?php } else { echo '<p>You currently have no titles on your bookshelf.</p>'; } ?>
 
 </div>
-
-

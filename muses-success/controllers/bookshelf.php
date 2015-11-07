@@ -27,6 +27,8 @@ class Bookshelf extends Controller {
 
         function index()
         {
+                $this->load->model('bookshelves');
+
                 $user_id = intval($this->uri->segment(2));
 
                 $user_info = $this->users->get_user_info(intval($user_id));
@@ -46,31 +48,31 @@ class Bookshelf extends Controller {
 
                         if ($tab == '' || $tab == 'all')
                         {
-                                $data['currently_reading'] = $this->library_get('current', $user_id);
-                                $data['completed_reading'] = $this->library_get('complete', $user_id);
-                                $data['plantoread'] = $this->library_get('planned', $user_id);
-                                $data['onhold'] = $this->library_get('onhold', $user_id);
-                                $data['dropped'] = $this->library_get('dropped', $user_id);
+                                $data['currently_reading'] = $this->bookshelves->get_bookshelf($user_id, 'current');
+                                $data['completed_reading'] = $this->bookshelves->get_bookshelf($user_id, 'complete');
+                                $data['plantoread'] = $this->bookshelves->get_bookshelf($user_id, 'planned');
+                                $data['onhold'] = $this->bookshelves->get_bookshelf($user_id, 'onhold');
+                                $data['dropped'] = $this->bookshelves->get_bookshelf($user_id, 'dropped');
                                 $this->load->view('library/bookshelf_all', $data);
                         } elseif ($tab == 'current')
                         {
-                                $data['currently_reading'] = $this->library_get('current', $user_id);
+                                $data['currently_reading'] = $this->bookshelves->get_bookshelf($user_id, 'current');
                                 $this->load->view('library/bookshelf_current', $data);
                         } elseif ($tab == 'complete')
                         {
-                                $data['completed_reading'] = $this->library_get('complete', $user_id);
+                                $data['completed_reading'] = $this->bookshelves->get_bookshelf($user_id, 'complete');
                                 $this->load->view('library/bookshelf_complete', $data);
                         } elseif ($tab == 'plantoread')
                         {
-                                $data['plantoread'] = $this->library_get('planned', $user_id);
+                                $data['plantoread'] = $this->bookshelves->get_bookshelf($user_id, 'planned');
                                 $this->load->view('library/bookshelf_planned', $data);
                         } elseif ($tab == 'onhold')
                         {
-                                $data['onhold'] = $this->library_get('onhold', $user_id);
+                                $data['onhold'] = $this->bookshelves->get_bookshelf($user_id, 'onhold');
                                 $this->load->view('library/bookshelf_onhold', $data);
                         } elseif ($tab == 'dropped')
                         {
-                                $data['dropped'] = $this->library_get('dropped', $user_id);
+                                $data['dropped'] =  $this->bookshelves->get_bookshelf($user_id, 'dropped');
                                 $this->load->view('library/bookshelf_dropped', $data);
                         }
 
@@ -90,6 +92,8 @@ class Bookshelf extends Controller {
         {
             if ($this->users->logged_in == false)
               redirect('accounts/login');
+
+            $this->load->model("bookshelves");
 
             $pt = array('page_title' => 'My Bookshelf - My Account', 'breadcrumbs' => array('<a href="'.site_url('accounts').'">My Account</a>', 'My Bookshelf'), 'bookshelf_js' => true);
             $pt['use_javascript'] = true;
@@ -168,50 +172,17 @@ class Bookshelf extends Controller {
             }
 
             $data = array();
-            $data['reading_current'] = $this->library_get('current', $this->users->cur_user['user_id']);
-            $data['reading_planned'] = $this->library_get('planned', $this->users->cur_user['user_id']);
-            $data['reading_onhold'] = $this->library_get('onhold', $this->users->cur_user['user_id']);
-            $data['reading_complete'] = $this->library_get('complete', $this->users->cur_user['user_id']);
-            $data['reading_dropped'] = $this->library_get('dropped', $this->users->cur_user['user_id']);
+            $data['reading_current'] = $this->bookshelves->get_bookshelf($this->users->cur_user['user_id'], 'current');
+            $data['reading_planned'] = $this->bookshelves->get_bookshelf($this->users->cur_user['user_id'], 'planned');
+            $data['reading_onhold'] =  $this->bookshelves->get_bookshelf($this->users->cur_user['user_id'], 'onhold');
+            $data['reading_complete'] =  $this->bookshelves->get_bookshelf($this->users->cur_user['user_id'], 'complete');
+            $data['reading_dropped'] =  $this->bookshelves->get_bookshelf($this->users->cur_user['user_id'], 'dropped');
 
             $this->load->view('header', $pt);
             $this->load->view('accounts/library', $data);
             $this->load->view('footer');
 
 
-        }
-
-        function library_get($type, $id)
-        {
-            $library = array();
-
-            $this->load->model('novels');
-
-            $i = 0;
-            $query = $this->db->query('SELECT * FROM `library` WHERE `book_status` = \''.$type.'\' AND `library_user` = \''.$id.'\'');
-            foreach ($query->result() as $item)
-            {
-                ++$i;
-                $library[$i] = array();
-                $library[$i]['id'] = $item->book_id;
-                $novel = $this->novels->get_novel($item->book_id);
-                if ($novel['chapters'] == 0 || $novel['chapters'] == '')
-                {
-                    $library[$i]['total_chapters'] = '??';
-                } else {
-                    $library[$i]['total_chapters'] = round($novel['chapters']);
-                }
-                if ($item->chapters_read == 0 || $item->chapters_read == '')
-                {
-                    $library[$i]['chapter_count'] = '??';
-                } else {
-                    $library[$i]['chapter_count'] = round($item->chapters_read);
-                }
-                $library[$i]['novel'] = '<a href="'.$novel['listing_url'].'">'.$novel['title'].'</a> by '.$novel['author_pen'].'';
-                $library[$i]['rating'] = $item->book_rating;
-            }
-
-            return $library;
         }
 
         function add_chapter()
@@ -314,36 +285,4 @@ class Bookshelf extends Controller {
             }
         }
 
-        function library_get($type, $id)
-        {
-                $library = array();
-
-                $this->load->model('novels');
-
-                $i = 0;
-                $query = $this->db->query('SELECT * FROM `library` WHERE `book_status` = \''.$type.'\' AND `library_user` = \''.$id.'\'');
-                foreach ($query->result() as $item)
-                {
-                        ++$i;
-                        $library[$i] = array();
-                        $library[$i]['id'] = $item->book_id;
-                        $novel = $this->novels->get_novel($item->book_id);
-                        if ($novel['chapters'] == 0 || $novel['chapters'] == '')
-                        {
-                                $library[$i]['total_chapters'] = '??';
-                        } else {
-                                $library[$i]['total_chapters'] = round($novel['chapters']);
-                        }
-                        if ($item->chapters_read == 0 || $item->chapters_read == '')
-                        {
-                                $library[$i]['chapter_count'] = '??';
-                        } else {
-                                $library[$i]['chapter_count'] = round($item->chapters_read);
-                        }
-                        $library[$i]['novel'] = '<a href="'.$novel['listing_url'].'">'.$novel['title'].'</a> by '.$novel['author_pen'].'';
-                        $library[$i]['rating'] = $item->book_rating;
-                }
-
-                return $library;
-        }
 }
