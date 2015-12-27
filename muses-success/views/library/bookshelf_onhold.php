@@ -23,7 +23,7 @@
                 <th colspan="3">On-Hold</th>
         </tr>
         <?php foreach ($onhold as $book) {
-                echo '<tr class="content"><td>'.$book['novel'].'</td><td>'.$book['chapter_count'].'/'.$book['total_chapters'].'</td><td>'.(($book['rating'] != 0) ? $book['rating'].'/10' : 'Not Rated').'</td></tr>';
+                echo '<tr class="content"><td><a href="'.site_url($book['story_slug']).'">'.$book['title'].'</a> by '.$book['author'].'</td><td>'.$book['read_chapter_count'].'/'.$book['total_chapter_count'].'</td><td>'.(($book['rating'] != 0) ? $book['rating'].'/10' : 'Not Rated').'</td></tr>';
         } ?>
 </table>
 <?php } else { echo '<p>This user has no books on their bookshelf which they are putting off to a later date.</p>'; }  ?>

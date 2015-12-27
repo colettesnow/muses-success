@@ -108,7 +108,7 @@ $route['accounts'] = "accounts/index";
 $route['accounts/process_login'] = "accounts/process_login";
 $route['accounts/logout'] = "accounts/logout";
 $route['accounts/editprofile'] = "accounts/editprofile";
-$route['accounts/bookshelf'] = "accounts/bookshelf";
+$route['accounts/bookshelf'] = "bookshelf/user_bookshelf";
 $route['accounts/lostpass'] = 'accounts/lostpass';
 /*
 $route['accounts/publications'] = "accounts/publications";
@@ -218,7 +218,7 @@ $route[':any'] = 'novel/view';
 /*
 $route['api/xmlrpc'] = 'api/xml_rpc/main';
 */
-$route['api/bookshelfs/addchapter'] = 'accounts/addchapter';
-$route['api/bookshelfs/minuschapter'] = 'accounts/minuschapter';
+$route['api/bookshelfs/addchapter'] = 'bookshelf/add_chapter';
+$route['api/bookshelfs/minuschapter'] = 'bookshelf/minus_chapter';
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */
