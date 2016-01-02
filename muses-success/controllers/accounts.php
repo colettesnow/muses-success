@@ -79,7 +79,30 @@ class Accounts extends Controller {
             return false;
         }
     }
+    
+    function check_username_unique($username)
+    {
+        $user = $this->db->get_where('users', array('screen_name' => $username));
+        if ($user->num_rows() == 0)
+        {
+            return true;
+        } else {
+            $this->validation->set_message('check_username_unique', 'We\'re sorry, but the requested username is already in use.');
+            return false;
+        }       
+    }
 
+    function check_email_unique($email_address)
+    {
+        $user = $this->db->get_where('users', array('email_address' => $email_address));
+        if ($user->num_rows() == 0)
+        {
+            return true;
+        } else {
+            $this->validation->set_message('check_email_unique', 'We\'re sorry, but the requested email address is already in use. If you have forgot your password, please use the <a href="/accounts/lostpass">Lost Password</a> form.');
+            return false;
+        }       
+    }
 
     function check_password($password)
     {
@@ -109,14 +132,14 @@ class Accounts extends Controller {
         $this->load->library('validation');
         $this->load->library('recaptcha');
 
-        $rules['a35099353beea9ca858de0e4c02d2dfee'] = "required|min_length[3]|max_length[20]|alpha_dash";
-        $rules['R6JZS7fjyIxO8oqSoSxg'] = "required|min_length[6]";
-        $rules['a119b78fdcd7b53be6e51989da6de4220'] = "required|valid_email";
+        $rules['username'] = "required|min_length[3]|max_length[20]|alpha_dash|callback_check_username_unique";
+        $rules['password'] = "required|min_length[6]";
+        $rules['email_address'] = "required|valid_email|callback_check_email_unique";
         $rules['recaptcha_response_field'] = 'required|callback_check_captcha';
 
-        $fields['a35099353beea9ca858de0e4c02d2dfee']    = 'Username';
-        $fields['R6JZS7fjyIxO8oqSoSxg']    = 'Password';
-        $fields['a119b78fdcd7b53be6e51989da6de4220'] = 'Email Address';
+        $fields['username']    = 'Username';
+        $fields['password']    = 'Password';
+        $fields['email_address'] = 'Email Address';
         $fields['recaptcha_response_field'] = 'Security Code';
 
         $this->validation->set_rules($rules);
@@ -134,9 +157,9 @@ class Accounts extends Controller {
         else
         {
             $user_data = array(
-                                'username' => $this->input->post('a35099353beea9ca858de0e4c02d2dfee'),
-                                'password' => $this->input->post('R6JZS7fjyIxO8oqSoSxg'),
-                                'email_address' => $this->input->post('a119b78fdcd7b53be6e51989da6de4220'),
+                                'username' => $this->input->post('username'),
+                                'password' => $this->input->post('password'),
+                                'email_address' => $this->input->post('email_address'),
                                 'ip_address' => $this->input->ip_address()
             );
             $register = $this->users->register($user_data);
