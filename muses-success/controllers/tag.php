@@ -180,7 +180,7 @@ class Tag extends Controller {
         
         $success = 0;
         
-		if (is_numeric($listing_id) && $this->novels->novel_exists_id($listing_id))
+		if (is_numeric($listing_id) && $this->novels->novel_exists($listing_id))
 		{
 		
 			$this->load->library('form_validation');

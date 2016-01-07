@@ -49,7 +49,7 @@ class Novel extends Controller {
                 $this->load->helper('text');
                 $this->load->library('simple_cache');
 
-                if (($novel_id != '' && $this->novels->novel_exists($novel_id) == true) || (intval($novel_id) != 0 && $this->novels->novel_exists_id($novel_id) == true))
+                if (($novel_id != '' && $this->novels->novel_exists($novel_id) == true) || (intval($novel_id) != 0 && $this->novels->novel_exists($novel_id) == true))
                 {
                         if (!$this->simple_cache->is_cached('viewnovel-'.$novel_id) && !$this->simple_cache->is_cached('viewnovel-'.$novel_id.'-page-data'))
                         {

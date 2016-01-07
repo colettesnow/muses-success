@@ -146,7 +146,7 @@ class Changeset extends Controller {
             $changeset_compare_id = $this->uri->segment(5);
             $this->load->model('novels');
             
-        if ($this->changes->changeset_exists($changeset_base_id) == true && $this->changes->changeset_exists($changeset_compare_id) == true && $this->novels->novel_exists_id($listing_id) == true)
+        if ($this->changes->changeset_exists($changeset_base_id) == true && $this->changes->changeset_exists($changeset_compare_id) == true && $this->novels->novel_exists($listing_id) == true)
         {                
     
                 $this->load->helper('diff');

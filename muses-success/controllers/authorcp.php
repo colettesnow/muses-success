@@ -82,7 +82,7 @@ class Authorcp extends Controller {
 		
         $this->load->model('novels', 'thumbnails');
         
-        if ($this->novels->novel_exists_id($novel_id) == true)
+        if ($this->novels->novel_exists($novel_id) == true)
         {
         	$novel = $this->novels->get_novel($novel_id);
 		

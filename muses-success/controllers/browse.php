@@ -207,7 +207,7 @@ class Browse extends Controller {
         {
                 $this->load->model('novels');
                 
-                if ($this->novels->novel_exists_id($id))
+                if ($this->novels->novel_exists($id))
                 {
                         return true;
                 } else {

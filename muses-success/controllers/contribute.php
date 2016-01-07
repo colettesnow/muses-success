@@ -81,7 +81,7 @@ class Contribute extends Controller {
     {
         $this->load->model('novels');
         $i = 0;
-        if ($this->novels->novel_exists_id($id) == true || $this->novels->novel_exists($id) == true)
+        if ($this->novels->novel_exists($id) == true)
         {
             $i = 1;
             return true;

@@ -3,22 +3,16 @@ class Novels extends Model
 {
     function novel_exists($id)
     {
-        $query = $this->db->get_where('stories', array('story_slug' => $id, 'story_approved' => '1'), 1);
+        $identifier_table = is_int($id) ? 'story_id' : 'story_slug';
+
+        $query = $this->db->get_where('stories', array($identifier_table => $id, 'story_approved' => '1'), 1);
 
         if ($query->num_rows() == 1)
-        return true;
-        else
-        return false;
-    }
-
-    function novel_exists_id($id)
-    {
-        $query = $this->db->get_where('stories', array('story_id' => intval($id), 'story_approved' => '1'), 1);
-
-        if ($query->num_rows() == 1)
-        return true;
-        else
-        return false;
+        {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function get_comments($id)
