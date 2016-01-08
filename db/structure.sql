@@ -473,8 +473,6 @@ CREATE TABLE IF NOT EXISTS `updates` (
 CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `screen_name` varchar(25) NOT NULL,
-  `openid_url` text NOT NULL,
-  `openid_account` set('0','1','2') NOT NULL,
   `password` varchar(64) NOT NULL,
   `secure_salt` varchar(10) NOT NULL,
   `ip_address` varchar(16) NOT NULL,

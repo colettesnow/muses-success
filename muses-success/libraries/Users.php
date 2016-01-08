@@ -2,16 +2,16 @@
 class Users
 {
         /*
-        
+
                 TODO: Rewrite Entire Library
-        
+
         */
 
         /*
                 #############################################################
-                
+
                 DON'T EDIT AFTER THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
-                
+
                 #############################################################
 
                 This ensures all users are logged out at default.
@@ -23,40 +23,39 @@ class Users
         public $logged_in = false;
 
         /*
-        
+
                 This array determines the data that is
                 returned when using cur_user to display
                 information about the current user when
                 no user is actually logged in.
-        
+
         */
 
         public $cur_user = array(
                                         'username' => 'Guest',
-                                        'access_level' => '0',
-                                        'openid_status' => '0'
+                                        'access_level' => '0'
                                 );
 
         /*
-        
+
                 This is merely used to pass an encrypted string
                 to the login function, so the appropriate cookie
                 can be set.
-        
+
         */
 
         private $password;
-        
+
         /*
-        
+
                 The Users method get's called as soon as the class
                 is initiallised, thus we can call auth to check if we
                 should report that a user is logged in or not.
-        
+
         */
-        
+
         private $user_fields = array();
-        
+
         public $permissions = array();
 
         public $user_group = 4;
@@ -67,30 +66,30 @@ class Users
         }
 
         /*
-        
+
                 This function is the most important.
-                
+
                 It takes the supplied user details, whether passed
                 from the login function or from a cookie, then checks
                 if the user exists, and if there password is correct,
                 then proceeds to fill the $cur_user array with information
                 about the currently logged in user and reports true on success
                 and false on failure.
-                
+
                 The function takes three paramaters. Generally all the fields are
                 optional but if you specify one, you should specify them all.
-                
+
                 Username           - the username of the user you want authenticated.
                                      If not set, we will check the appropriate cookie,
                                      otherwise we will return false.
-                                     
+
                 Password           - the password of the user you want authenticated.
                                      If not set, we will check the appropriate cookie,
                                      otherwise we will return false.
 
                 not_encrypted      - set to true if the password you supplied was not hashed for use in a cookie,
                                      otherwise leave blank or set to false.
-                                     
+
                 This function is private and generally only needs to be called by Users(); and login();.
 
         */
@@ -140,9 +139,7 @@ class Users
                                                                         'email_address' => $cur_user->email_address,
                                                                         'inbox_unread' => $cur_user->inbox_unread,
                                                                         'data' => $cur_user,
-                                                                        'upload_thumbs' => $cur_user->upload_thumbs,
-                                                                        'openid_status' => $cur_user->openid_account,
-                                                                        'warning' => ($cur_user->display_name == '' && $cur_user->openid_account == '1') ? '1' : '0'
+                                                                        'upload_thumbs' => $cur_user->upload_thumbs
                                                                 );
 
                                                 if ($cur_user->last_access < time()-(15*60))
@@ -164,18 +161,18 @@ class Users
                                         }
 
                                 }
-                                
+
                         }
 
                 }
-                
+
                 if (!isset($this->logged_in))
                 {
                         $this->logged_in = false;
                         return false;
                 }
         }
-        
+
         public function login($username, $password)
         {
                 $CI =& get_instance();
@@ -201,63 +198,19 @@ class Users
 
             if (count($this->permissions) == 0)
             {
-            
+
                 $query = $CI->db->get_where('user_groups', array('g_id' => $this->user_group));
                 foreach ($query->row_array() as $perm => $allowedornot)
                 {
                     $this->permissions[$perm] = $allowedornot;
                 }
-            
+
             }
-            
+
             return $this->permissions[$permission];
 
         }
-        
-        function openid_auth($openid_url)
-        {
 
-                $CI =& get_instance();
-                
-                $CI->load->helper('cookie');
-                $CI->load->helper('string');
-                
-                $query = $CI->db->get_where('users', array('openid_url' => $openid_url), 1);
-                if ($query->num_rows() == 1)
-                {
-                        $user = $query->row();
-                        
-                        $CI->load->library('user_agent');
-                        
-                        $password = sha1($CI->config->item('encryption_key').$user->password.$CI->agent->agent_string());
-                        
-                        set_cookie('usn', $user->screen_name, 2678400);
-                        set_cookie('pwd', $password, 2678400);
-                        
-                        return '1';
-
-                } else {
-
-
-                        $screen_name = substr('openid-'.md5($openid_url), 0, 25);
-                        $password = random_string('alnum', 25);
-                        $user_data = array(
-                                'username' => $screen_name,
-                                'openid_url' => $openid_url,
-                                'password' => $password,
-                                'confirm_password' => $password,
-                                'email_address' => ''
-                        );
-                        
-                        $register = $this->register($user_data, 1);
-                        $login = $this->login($screen_name, $password);
-                        
-                        return '2';
-
-                }
-        
-        }
-        
         public function logout()
         {
                 $CI =& get_instance();
@@ -268,7 +221,7 @@ class Users
                 delete_cookie('pwd');
                 return array('code' => 'success', 'message' => 'You have successfully logged out.');
         }
-        
+
         function get_user_info($user_id)
         {
                 $CI =& get_instance();
@@ -281,8 +234,8 @@ class Users
                         return false;
                 }
         }
-        
-        public function register($user_data = array(), $openid = 0)
+
+        public function register($user_data = array())
         {
                 $CI =& get_instance();
 
@@ -297,7 +250,7 @@ class Users
                         } elseif (!isset($user_data['password']))
                         {
                                 $error_message = 'You must choose a password.';
-                        } elseif (!isset($user_data['email_address']) && $openid == 0)
+                        } elseif (!isset($user_data['email_address']))
                         {
                                 $error_message = 'You must specify a valid email address.';
                         } elseif (strlen($user_data['username']) < 3 || strlen($user_data['username']) > 20)
@@ -313,7 +266,7 @@ class Users
                         {
                                 $error_message = 'The supplied e-mail address is not valid.';
                         }
-                        
+
                         if (!isset($error_message))
                         {
 
@@ -345,24 +298,24 @@ class Users
                                         $data['access_level'] = 1;
                                         $data['user_group'] = 1;
                                         $CI->db->insert('users', $data);
-                                        
+
                                         return array('code' => 'success', 'message' => 'The user account was created successfully.');
-                                        
+
                                 } else {
-                                
+
                                         return array('code' => 'error', 'message' => $error_message);
-                                
+
                                 }
                         }
-                
+
                 }
         }
-        
+
         public function change_password($new_password)
         {
                 $CI =& get_instance();
                 $CI->load->helper('string');
-                
+
                 $secure_salt = random_string('alnum', 10);
 
                 $CI->db->where('screen_name', $this->cur_user['username']);
@@ -371,15 +324,15 @@ class Users
                 return true;
 
         }
-        
+
         public function change_access($username, $level)
         {
                 $CI =& get_instance();
-                
+
                 $CI->db->where('screen_name', $this->cur_user['username']);
                 $CI->db->update('users', array('access_level' => $level));
         }
-        
+
         public function update_profile_field($field_to_update, $value_for_field)
         {
                 if ($field_to_update != 'screen_name' || $field_to_update != 'access_level' || $field_to_update != 'password' || $field_to_update != 'secure_salt' || $field_to_update != 'user_id' || $field_to_update != 'registration_date')
@@ -387,7 +340,7 @@ class Users
                         $this->user_fields[$field_to_update] = $value_for_field;
                 }
         }
-        
+
         public function update_profile_commit($user_id = '')
         {
                 $CI =& get_instance();
@@ -408,5 +361,3 @@ class Users
         }
 
 }
-
-?>
