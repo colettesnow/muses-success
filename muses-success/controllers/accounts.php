@@ -37,7 +37,7 @@ class Accounts extends Controller {
 
         $this->load->library('validation');
 
-        $rules['username']    = "required|min_length[3]|max_length[20]|callback_check_username";
+        $rules['username']    = "required|min_length[3]|max_length[20]|callback_check_username[exists]";
         $rules['password']    = "required|min_length[6]|max_length[25]|callback_check_password";
 
         $this->validation->set_rules($rules);
@@ -68,28 +68,25 @@ class Accounts extends Controller {
         $this->load->view('footer');
     }
 
-    function check_username($username)
+    function check_username($username, $check_for = 'exists')
     {
         $user = $this->db->get_where('users', array('screen_name' => $username));
-        if ($user->num_rows() == 1)
+
+        $user_count = 1;
+        $error_message = 'We\'re sorry, but we cannot find an account for this username and/or password.';
+        if ($check_for == 'unique')
+        {
+          $user_count = 0;
+          $error_message = 'We\'re sorry, but the requested username is already in use.';
+        }
+
+        if ($user->num_rows() == $user_count)
         {
             return true;
         } else {
-            $this->validation->set_message('check_username', 'We\'re sorry, but we cannot find an account for this username and/or password.');
+            $this->validation->set_message('check_username', $error_message);
             return false;
         }
-    }
-    
-    function check_username_unique($username)
-    {
-        $user = $this->db->get_where('users', array('screen_name' => $username));
-        if ($user->num_rows() == 0)
-        {
-            return true;
-        } else {
-            $this->validation->set_message('check_username_unique', 'We\'re sorry, but the requested username is already in use.');
-            return false;
-        }       
     }
 
     function check_email_unique($email_address)
@@ -101,7 +98,7 @@ class Accounts extends Controller {
         } else {
             $this->validation->set_message('check_email_unique', 'We\'re sorry, but the requested email address is already in use. If you have forgot your password, please use the <a href="/accounts/lostpass">Lost Password</a> form.');
             return false;
-        }       
+        }
     }
 
     function check_password($password)
@@ -132,7 +129,7 @@ class Accounts extends Controller {
         $this->load->library('validation');
         $this->load->library('recaptcha');
 
-        $rules['username'] = "required|min_length[3]|max_length[20]|alpha_dash|callback_check_username_unique";
+        $rules['username'] = "required|min_length[3]|max_length[20]|alpha_dash|callback_check_username[unique]";
         $rules['password'] = "required|min_length[6]";
         $rules['email_address'] = "required|valid_email|callback_check_email_unique";
         $rules['recaptcha_response_field'] = 'required|callback_check_captcha';
