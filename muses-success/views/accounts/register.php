@@ -7,7 +7,7 @@
         <p><label for="username">Username</label> <input type="text" id="uxn232da" name="username" value="<?php echo $this->validation->username;?>" /></p>
         <p><label for="password">Password (<a href="javascript:show_hide();" id="show_hide">show</a>)</label> <input type="password" id="password" name="password" value="<?php echo $this->validation->password;?>" /></p>
         <p><label for="email_address">Email Address</label> <input type="text" id="email_address" name="email_address" value="<?php echo $this->validation->email_address;?>" /></p>
-        <p><label for="captcha">Security Code</label><?php echo $captcha ?></p>
+        <input type="hidden" id="recaptcha_response_field" name="recaptcha_response_field" value="" />
         <p><input type="submit" name="register" value="Register" /></p>
 </form>
 

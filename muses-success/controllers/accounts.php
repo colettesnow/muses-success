@@ -127,7 +127,7 @@ class Accounts extends Controller {
         $this->load->helper(array('form', 'url'));
 
         $this->load->library('validation');
-        $this->load->library('recaptcha');
+        $this->load->library('recaptcha_lib');
 
         $rules['username'] = "required|min_length[3]|max_length[20]|alpha_dash|callback_check_username[unique]";
         $rules['password'] = "required|min_length[6]";
@@ -143,12 +143,12 @@ class Accounts extends Controller {
         $this->validation->set_fields($fields);
 
         $data = array(
-                        'captcha' => $this->recaptcha->recaptcha_get_html()
+                        'captcha' => ""
         );
 
         if ($this->validation->run() == FALSE)
         {
-            $this->load->view('header', array('page_title' => 'Account Registration', 'breadcrumbs' => array('Register')));
+            $this->load->view('header', array('page_title' => 'Account Registration', 'breadcrumbs' => array('Register'), "recaptcha_action" => "register"));
             $this->load->view('accounts/register.php', $data);
         }
         else
@@ -388,12 +388,22 @@ class Accounts extends Controller {
         }
     }
 
-    function check_captcha($val) {
-        $this->recaptcha->recaptcha_check_answer($_SERVER["REMOTE_ADDR"],$this->input->post('recaptcha_challenge_field'),$val);
-        if ($this->recaptcha->is_valid) {
+    function check_captcha($val) 
+    {
+        $recaptcha = new \ReCaptcha\ReCaptcha(
+            $this->config->item('recaptcha_secret_key')
+        );
+        $resp = $recaptcha->setExpectedHostname('muses-success.info')->verify(
+            $this->input->post('recaptcha_response_field'), $_SERVER["CF-Connecting-IP"]
+        );
+
+        if ($resp->isSuccess()) {
             return true;
         } else {
-            $this->validation->set_message('check_captcha','Incorrect Security Image Response');
+            $this->validation->set_message( 
+                'check_captcha',
+                'Google Recaptcha verification failed: It thinks you are not human. If you believe this to be in error, please contact us.' 
+            );
             return false;
         }
     }
@@ -415,4 +425,3 @@ class Accounts extends Controller {
     }
 
 }
-?>

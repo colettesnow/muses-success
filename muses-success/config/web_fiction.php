@@ -9,7 +9,8 @@
 | entry is an array of genres.
 |
 */
-
+$config['recaptcha_secret_key'] = '';
+$config['recaptcha_site_key'] = '';
 $config['listing_discussion_forum'] = false;
 $config['lock_all_listings'] = false;
 $config['static_resources_url'] = 'http://static.sorrowfulunfounded.com/muses-success/';

@@ -4,13 +4,13 @@
     <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 <title><?php echo isset($page_title) ? $page_title.' - ' : ''; ?>Muse's Success</title>
-                <link rel="stylesheet" media="screen" type="text/css" href="http://muses-success.info/static/css/new-layout/style.min.css?v=2" />		
-				<!--[if lte IE 7]>
-				<link rel="stylesheet" type="text/css" href="<?php echo site_url('static/css/new-layout/ie7.css'); ?>" media="screen" />
-				<![endif]-->
+                <link rel="stylesheet" media="screen" type="text/css" href="<?php echo site_url('static/css/new-layout/style.min.css?v=2'); ?>" />		
+		<!--[if lte IE 7]>
+		<link rel="stylesheet" type="text/css" href="<?php echo site_url('static/css/new-layout/ie7.css'); ?>" media="screen" />
+		<![endif]-->
                 <?php if (isset($canonical)) { echo '<link rel="canonical" href="'.$canonical.'"/>'; } ?>
                 <?php if (isset($use_javascript) && $use_javascript == true) { ?>
-                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
                 <?php foreach ($javascript as $javascript_file) { ?>
                 <script src="<?php echo site_url('static/js/'.$javascript_file.''); ?>" type="text/javascript"></script>
 <?php } }
@@ -27,12 +27,38 @@
 				?>
                 <link rel="alternate" type="application/rss+xml" title="Muse's Success - Latest Web Fiction" href="http://feeds.feedburner.com/MusesSuccess-LatestAdditions" />
                 <link rel="alternate" type="application/rss+xml" title="Muse's Success - Latest Reviews" href="http://feeds.feedburner.com/MusesSuccess-LatestReviews" />
-                <meta name="microid" content="mailto+http:sha1:3e4166417233e8c94e1e099236cbce428138507d" />
-				<link rel="publisher" href="https://plus.google.com/108660956896900398737" />
+                <script type="application/ld+json">
+		{
+		  "@context" : "http://schema.org",
+		  "@type" : "Organization",
+		  "name" : "Muse's Success",
+		  "url" : "https://muses-success.info/",
+		  "sameAs" : [
+		    "https://www.facebook.com/muses.success",
+		    "https://twitter.com/muses_success",
+		    "https://plus.google.com/+Muses-SuccessInfo"
+		  ]
+		}
+		</script>
+		<link rel="publisher" href="https://plus.google.com/108660956896900398737" />
+		<meta name="msvalidate.01" content="AE73D056C5A1C87485BED0E32B616D56" />		
+		<meta name="referrer" content="unsafe-url" />
                 <style type="text/css">
                     .muse_content { float: left; width: 760px; }
                     .ad {  float: right; width: 180px; }
                 </style>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/cookie-bar/1/cookiebar-latest.js?tracking=1&thirdparty=1&privacyPage=https%3A%2F%2Fmuses-success.info%2Fp%2Fprivacy"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=6Lc2T7cUAAAAADHta_Pz6Bixv16GxBM6AbDpM0tO"></script>
+        <?php if (isset($recaptcha_action)) { ?>
+        <script>
+            grecaptcha.ready(function() {
+                grecaptcha.execute('6Lc2T7cUAAAAADHta_Pz6Bixv16GxBM6AbDpM0tO', {action: '<?php echo $recaptcha_action; ?>'}).then(function(token) {
+                    recaptchaElement = document.getElementById("recaptcha_response_field");
+                    recaptchaElement.value = token;
+                });
+            });
+        </script>
+        <?php } ?>
 </head>
 
     <body itemscope itemtype="http://schema.org/WebPage">
@@ -150,6 +176,16 @@
         </div>
 
         <div id="main_page_content">
+            
+            <div align="center" style="margin-bottom: 10px;"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Muse Top -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-4250402539296088"
+     data-ad-slot="8556337903"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
 
                 <?php if (isset($breadcrumbs) && count($breadcrumbs) >= 1) { ?><p class="breadcrumbs" itemprop="breadcrumb"><a href="<?php echo site_url(); ?>">Muse's Success</a> » <?php echo implode(' » ', $breadcrumbs); ?></p><?php } ?>
 
