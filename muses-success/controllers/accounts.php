@@ -36,20 +36,23 @@ class Accounts extends Controller {
         $this->load->helper(array('form', 'url'));
 
         $this->load->library('validation');
+        $this->load->library('recaptchalib');
 
         $rules['username']    = "required|min_length[3]|max_length[20]|callback_check_username[exists]";
         $rules['password']    = "required|min_length[6]|max_length[25]|callback_check_password";
+        $fields['recaptcha_response_field'] = 'required|callback_check_captcha';
 
         $this->validation->set_rules($rules);
 
         $fields['username']    = 'Username';
         $fields['password']    = 'Password';
+        $fields['recaptcha_response_field'] = 'Security Code';
 
         $this->validation->set_fields($fields);
 
         $this->validation->set_error_delimiters('<p class="error">', '</p>');
 
-        $this->load->view('header', array('page_title' => 'Log In', 'breadcrumbs' => array('Log In')));
+        $this->load->view('header', array('page_title' => 'Log In', 'recaptcha_action' => 'login', 'breadcrumbs' => array('Log In')));
         if ($this->validation->run() == FALSE)
         {
             $this->load->view('accounts/login.php');
@@ -127,7 +130,7 @@ class Accounts extends Controller {
         $this->load->helper(array('form', 'url'));
 
         $this->load->library('validation');
-        $this->load->library('recaptcha_lib');
+        $this->load->library('Recaptchalib');
 
         $rules['username'] = "required|min_length[3]|max_length[20]|alpha_dash|callback_check_username[unique]";
         $rules['password'] = "required|min_length[6]";
@@ -197,37 +200,40 @@ class Accounts extends Controller {
 
     function editprofile()
     {
-        $this->load->view('header', array('page_title' => 'Edit Profile', 'breadcrumbs' => array('<a href="'.site_url('accounts').'">My Account</a>', 'Edit Profile')));
+        $this->load->view('header', array('page_title' => 'Edit Profile', 'recaptcha_action' => 'editprofile', 'breadcrumbs' => array('<a href="'.site_url('accounts').'">My Account</a>', 'Edit Profile')));
 
         if ($this->users->logged_in == true)
         {
             $this->load->helper(array('form', 'url'));
 
             $this->load->library('validation');
+            $this->load->library('recaptchalib');
 
-            $rules['email_address']         = "required|valid_email|xss_clean";
-            $rules['website_url']           = "prep_url|xss_clean";
-            $rules['display_name']          = "alphanumeric|min_length[3]|max_length[25]";
-            $rules['location']              = "htmlspecialchars|min_length[3]|max_length[50]";
-            $rules['gender']                = "max_length[100]";
-            $rules['windowslive']           = "htmlspecialchars|valid_email|max_length[320]";
-            $rules['yahoo']                 = "htmlspecialchars|max_length[32]";
-            $rules['aol']                   = "htmlspecialchars|min_length[3]|max_length[16]";
-            $rules['google']                = "htmlspecialchars|valid_email|max_length[320]";
-            $rules['signature']             = "xss_clean|min_length[3]|max_length[500]";
+            $rules['email_address']            = "required|valid_email|xss_clean";
+            $rules['website_url']              = "prep_url|xss_clean";
+            $rules['display_name']             = "alphanumeric|min_length[3]|max_length[25]";
+            $rules['location']                 = "htmlspecialchars|min_length[3]|max_length[50]";
+            $rules['gender']                   = "max_length[100]";
+            $rules['windowslive']              = "htmlspecialchars|valid_email|max_length[320]";
+            $rules['yahoo']                    = "htmlspecialchars|max_length[32]";
+            $rules['aol']                      = "htmlspecialchars|min_length[3]|max_length[16]";
+            $rules['google']                   = "htmlspecialchars|valid_email|max_length[320]";
+            $rules['signature']                = "xss_clean|min_length[3]|max_length[500]";
+            $rules['recaptcha_response_field'] = 'required|callback_check_captcha';
 
             $this->validation->set_rules($rules);
 
-            $fields['email_address']         = "Email Address";
-            $fields['website_url']           = "Website URL";
-            $fields['display_name']          = "Display Name";
-            $fields['location']              = "Location";
-            $fields['gender']                = "Gender";
-            $fields['windowslive']           = "Windows Live IM";
-            $fields['yahoo']                 = "Yahoo IM";
-            $fields['aol']                   = "AOL IM";
-            $fields['google']                = "Google Talk IM";
-            $fields['signature']             = "Signature";
+            $fields['email_address']            = "Email Address";
+            $fields['website_url']              = "Website URL";
+            $fields['display_name']             = "Display Name";
+            $fields['location']                 = "Location";
+            $fields['gender']                   = "Gender";
+            $fields['windowslive']              = "Windows Live IM";
+            $fields['yahoo']                    = "Yahoo IM";
+            $fields['aol']                      = "AOL IM";
+            $fields['google']                   = "Google Talk IM";
+            $fields['signature']                = "Signature";
+            $fields['recaptcha_response_field'] = 'Security Code';
 
             $this->validation->set_fields($fields);
 
@@ -273,22 +279,25 @@ class Accounts extends Controller {
 
     function changepassword()
     {
-        $this->load->view('header', array('page_title' => 'Change Password', 'breadcrumbs' => array('<a href="'.site_url('accounts').'">My Account</a>', 'Change Password')));
+        $this->load->view('header', array('page_title' => 'Change Password', 'recaptcha_action' => 'changepassword', 'breadcrumbs' => array('<a href="'.site_url('accounts').'">My Account</a>', 'Change Password')));
 
         if ($this->users->logged_in == true)
         {
             $this->load->helper(array('form', 'url'));
 
             $this->load->library('validation');
+            $this->load->library('recaptchalib');
 
             $rules['old_password']              = "required|min_length[6]|max_length[25]|alpha_dash|callback_oldpasswordcorrect";
             $rules['new_password']              = "required|min_length[6]|max_length[25]|alpha_dash|matches[confirm_password]";
             $rules['confirm_password']          = "required|min_length[6]|max_length[25]|alpha_dash";
+            $rules['recaptcha_response_field'] = 'required|callback_check_captcha';
             $this->validation->set_rules($rules);
 
             $fields['old_password']             = 'Current Password';
             $fields['new_password']             = 'New Password';
             $fields['confirm_password']         = 'Confirm Password';
+            $fields['recaptcha_response_field'] = 'Security Code';
             $this->validation->set_fields($fields);
 
             if ($this->validation->run() == FALSE)
@@ -340,7 +349,7 @@ class Accounts extends Controller {
         $this->load->helper(array('form', 'url'));
         $this->load->model('accounts/password');
         $this->load->library('validation');
-        $this->load->library('recaptcha');
+        $this->load->library('Recaptchalib');
 
         $rules['email_address'] = 'required|valid_email|callback_checkemail';
         $rules['recaptcha_response_field'] = 'required|callback_check_captcha';
@@ -350,10 +359,10 @@ class Accounts extends Controller {
         $this->validation->set_fields($fields);
 
         $data = array(
-            'captcha' => $this->recaptcha->recaptcha_get_html()
+            'captcha' => ''
         );
 
-        $this->load->view('header', array('page_title' => 'Lost Password Recovery'));
+        $this->load->view('header', array('page_title' => 'Lost Password Recovery', 'recaptcha_action' => 'lostpass'));
 
         if ($this->validation->run() == FALSE)
         {
