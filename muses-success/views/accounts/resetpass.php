@@ -4,6 +4,6 @@
 
 <form method="post">
 <p><label for="email_address">Email Address</label> <input type="text" name="email_address" /></p>
-<p><label>Security Code</label> <?php echo $captcha; ?></p>
+<input type="hidden" name="recaptcha_response_field" id="recaptcha_response_field" value="" />
 <p><input type="submit" value="Reset" /></p>
 </form>

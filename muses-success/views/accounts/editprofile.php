@@ -16,4 +16,5 @@
 <p><label for="signature">Signature</label> <textarea name="signature" id="signature"><?php echo $field_signature;?></textarea></p>
 <hr />
 <p><input type="submit" value="Update Preferences" /></p>
+<input type="hidden" id="recaptcha_response_field" name="recaptcha_response_field" value="" />
 </form>
