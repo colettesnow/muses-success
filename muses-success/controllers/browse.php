@@ -448,7 +448,16 @@ class Browse extends Controller {
                 $this->output->set_header('Content-Type: text/plain');
                 
                 $rating = $this->input->post('value');
-                
+
+                $this->load->library('Recaptchalib');
+                $this->recaptchalib->setAction("rating");
+                if ($this->recaptchalib->verify($this->input->post('token'))->isSuccess()) {
+
+                } else {
+                        $this->output->set_output('Thank you for rating!!');
+                        return;
+                }
+
                 if ($novel != false)
                 {
                 if ($rating == '0' || $rating == '1' || $rating == '2' || $rating == '3' || $rating == '4' || $rating == '5' || $rating == '6' || $rating == '7' || $rating == '8' || $rating == '9' || $rating == '10')
