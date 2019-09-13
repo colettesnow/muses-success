@@ -81,6 +81,7 @@ class Recaptchalib
     public function setAction(string $action)
     {
         $this->_action = $action;
+        return $this;
     }
 
     /**
@@ -116,7 +117,7 @@ class Recaptchalib
     /**
      * Verify recaptcha request with normal threshold
      *
-     * @param string $field_name Name of the field to check for the Recaptcha token.
+     * @param string $token Recaptcha token from the JS to verify.
      * @param int    $threshold  Optional, threshold as decimal out of 1.0 for
      *                           Recaptcha's human confidence.
      *
@@ -148,11 +149,11 @@ class Recaptchalib
     /**
      * Verify recaptcha request with strict threshold
      *
-     * @param string $field_name Field containing Recaptcha token
+     * @param string $token Recaptcha token from the JS to verify.
      *
      * @return \ReCaptcha\verify\isSuccess()
      */
-    public function verifyStrict(string $field_name)
+    public function verifyStrict(string $token)
     {
         return $this->verify($field_name, STRICT_THRESHOLD);
     }
@@ -160,11 +161,11 @@ class Recaptchalib
     /**
      * Verify recaptcha request with permissive threshold
      *
-     * @param string $field_name Field containing Recaptcha token
+     * @param string $token Recaptcha token from the JS to verify.
      *
      * @return \ReCaptcha\verify\isSuccess()
      */
-    public function verifyPermissive(string $field_name)
+    public function verifyPermissive(string $token)
     {
         return $this->verify($field_name, PERMISSIVE_THRESHOLD);
     }
